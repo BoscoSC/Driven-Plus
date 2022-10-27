@@ -1,21 +1,58 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 import logo from "../assets/logo.png";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const navigateToRegister = () => {
     navigate("/sign-up");
   };
 
+  function loginUser(event) {
+    event.preventDefault();
+
+    const URL = "https://mock-api.driven.com.br/api/v4/driven-plus/auth/login";
+    const body = {
+      email: email,
+      password: password,
+    };
+
+    const promise = axios.post(URL, body);
+
+    promise.then((answer) => {
+      alert("Logado com sucesso");
+      console.log(answer.data);
+    });
+
+    promise.catch((error) => {
+      alert(error.response.data.message);
+    });
+  }
+
   return (
     <Page>
       <Logo src={logo} alt="" />
-      <FormWrapper>
-        <Input required type="email" placeholder="E-mail" />
-        <Input required type="password" placeholder="Senha" />
+      <FormWrapper onSubmit={loginUser}>
+        <Input
+          required
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          required
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <Button>ENTRAR</Button>
         <GoToRegister onClick={navigateToRegister}>
           Não possuí uma conta? Cadastre-se
