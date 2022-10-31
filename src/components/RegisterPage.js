@@ -33,8 +33,8 @@ export default function RegisterPage() {
       navigateToLogin();
     });
 
-    promise.catch((error) => {
-      alert(error.response.data.message);
+    promise.catch((err) => {
+      alert(err.response.data.message);
     });
   }
 
@@ -69,7 +69,7 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>CADASTRAR</Button>
+        <Button type="submit">CADASTRAR</Button>
         <GoToRegister onClick={navigateToLogin}>
           Já possuí uma conta? Entre
         </GoToRegister>
@@ -98,7 +98,7 @@ const FormWrapper = styled.form`
 
 const Input = styled.input`
   background: #ffffff;
-  width: 70%;
+  width: 80%;
   height: 55px;
   padding: 18px 15px;
   box-sizing: border-box;
@@ -115,7 +115,7 @@ const Button = styled.button`
   cursor: pointer;
   background: #ff4791;
   color: #ffffff;
-  width: 70%;
+  width: 80%;
   height: 55px;
   border-radius: 8px;
   font-weight: 700;

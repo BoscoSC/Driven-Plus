@@ -3,16 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
+import useApp from "../context/useApp";
 import logo from "../assets/logo.png";
 
 export default function LoginPage() {
+  const { setToken, setName } = useApp();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [membership, setMembership] = useState("");
   const navigate = useNavigate();
-
-  const navigateToRegister = () => {
-    navigate("/sign-up");
-  };
 
   function loginUser(event) {
     event.preventDefault();
@@ -26,8 +25,15 @@ export default function LoginPage() {
     const promise = axios.post(URL, body);
 
     promise.then((answer) => {
-      alert("Logado com sucesso");
-      console.log(answer.data);
+      localStorage.setItem("token", answer.data.token);
+      setToken(answer.data.token);
+      setName(answer.data.name);
+      setMembership(answer.data.membership);
+      if (membership !== null) {
+        navigate("/subscriptions")();
+      } else {
+        navigate("/home")();
+      }
     });
 
     promise.catch((error) => {
@@ -53,8 +59,8 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>ENTRAR</Button>
-        <GoToRegister onClick={navigateToRegister}>
+        <Button type="submit">ENTRAR</Button>
+        <GoToRegister onClick={() => navigate("/sign-up")}>
           Não possuí uma conta? Cadastre-se
         </GoToRegister>
       </FormWrapper>
@@ -84,7 +90,7 @@ const FormWrapper = styled.form`
 
 const Input = styled.input`
   background: #ffffff;
-  width: 70%;
+  width: 80%;
   height: 55px;
   padding: 18px 15px;
   box-sizing: border-box;
@@ -101,7 +107,7 @@ const Button = styled.button`
   cursor: pointer;
   background: #ff4791;
   color: #ffffff;
-  width: 70%;
+  width: 80%;
   height: 55px;
   border-radius: 8px;
   font-weight: 700;
